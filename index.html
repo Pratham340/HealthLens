@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <title>Claimlight — unpack health claims</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a href="#top" class="brand" aria-label="Claimlight home"><span class="brand-mark">✳</span><span>claimlight</span></a>
+        <button class="icon-button" id="aboutButton" aria-label="About this tool">i</button>
+      </header>
+
+      <section class="hero" id="top">
+        <p class="eyebrow"><span></span> Evidence, with the reasoning visible</p>
+        <h1>Health claims<br /><em>in the clear.</em></h1>
+        <p>Bring a health claim. We’ll show what it says, what evidence would need to show, and where the uncertainty lives.</p>
+      </section>
+
+      <section class="claim-form" aria-labelledby="claimHeading">
+        <div class="section-heading"><h2 id="claimHeading">A claim you’ve heard</h2><span>Sent only when you investigate</span></div>
+        <textarea id="claimInput" maxlength="280" spellcheck="true" placeholder="e.g. Turmeric cures inflammation."></textarea>
+        <div class="form-actions"><button class="example-button" id="exampleButton" type="button">Try the turmeric example <span>↗</span></button><button class="primary-button" id="investigateButton" type="button">Investigate claim <span>→</span></button></div>
+      </section>
+      <p class="privacy-note">No diagnosis. No treatment plan. Your claim is not saved by this app.</p>
+      <p class="prototype-note">AI disclosure: Claimlight uses an AI model and web search to draft a source-linked educational dossier. It can be incomplete or wrong — open the sources and check the context.</p>
+
+      <section id="emptyState" class="empty-state"><div class="empty-emblem"><span>?</span></div><h2>See the work behind the answer.</h2><p>Instead of a “true or false” badge, Claimlight shows the question, the evidence boundaries, and the gaps.</p></section>
+
+      <section id="results" class="results hidden" aria-live="polite">
+        <div class="result-header"><div><p class="eyebrow"><span></span> Claim dossier</p><h2 id="resultHeading">A closer look at the claim</h2></div><button class="copy-button" id="copyButton" aria-label="Copy a text summary">⧉</button></div>
+
+        <section class="dossier-card claim-card"><div class="card-label"><span>01</span> Claim</div><p class="quoted-claim" id="quotedClaim"></p><div class="claim-parts" id="claimParts"></div></section>
+
+        <section class="dossier-card evidence-card"><div class="card-label"><span>02</span> Evidence we looked for</div><h3>Does research test this exact promise?</h3><p id="evidenceText"></p><div class="method-grid"><div><b>Human research</b><span>More relevant than lab-only findings</span></div><div><b>Comparison group</b><span>Helps separate signal from chance</span></div><div><b>Matching outcome</b><span>“Cure” needs more than a marker change</span></div></div></section>
+
+        <section class="dossier-card strength-card"><div class="card-label"><span>03</span> Evidence strength</div><div class="strength-line"><div><h3 id="strengthTitle">Limited & mixed</h3><p id="strengthText"></p></div><span class="strength-pill" id="strengthPill">Caution</span></div><div class="reasoning-list" id="reasoningList"></div></section>
+
+        <section class="dossier-card gaps-card"><div class="card-label"><span>04</span> What we don’t know</div><div id="gapsList" class="gaps-list"></div></section>
+
+        <section class="sources-section" aria-labelledby="sourcesHeading"><div class="sources-header"><div><p class="eyebrow"><span></span> Sources</p><h2 id="sourcesHeading">Open the underlying work.</h2></div><span id="sourceCount">0 sources</span></div><p class="sources-note" id="sourcesNote"></p><div id="sourceList"></div></section>
+
+        <section class="next-card"><div><p class="eyebrow"><span></span> A realistic next step</p><h2>Bring better questions.</h2></div><ul id="nextSteps"></ul><p class="boundary-note">This is an educational research summary, not medical advice. It cannot tell you what to take, stop, or change.</p></section>
+      </section>
+    </main>
+
+    <div id="aboutModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><div class="modal-card"><button class="close-button" id="closeButton" aria-label="Close">×</button><p class="eyebrow"><span></span> About Claimlight</p><h2 id="aboutTitle">A map, not medical care.</h2><p>Claimlight turns a health statement into questions about evidence: what was studied, in whom, compared with what, and what was not tested. It uses AI and web search to assemble each dossier.</p><p>It does not diagnose, determine whether something is safe or effective for you, or replace guidance from a qualified professional. Research coverage can vary, so the app shows its sources and uncertainty instead of a certainty badge.</p></div></div>
+    <footer><span>Claimlight</span><span>Evidence deserves context</span></footer>
+    <script src="script.js"></script>
+  </body>
+</html>
