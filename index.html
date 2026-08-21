@@ -1,57 +1,180 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#fbfaf7" />
-    <title>Claimlight — unpack health claims</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <main class="app-shell">
-      <header class="topbar">
-        <a href="#top" class="brand" aria-label="Claimlight home"><span class="brand-mark">✳</span><span>claimlight</span></a>
-        <button class="icon-button" id="aboutButton" aria-label="About this tool">i</button>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Claim Detective</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-      <section class="hero" id="top">
-        <p class="eyebrow"><span></span> Evidence, with the reasoning visible</p>
-        <h1>Health claims<br /><em>in the clear.</em></h1>
-        <p>Bring a health claim. We’ll show what it says, what evidence would need to show, and where the uncertainty lives.</p>
-      </section>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🔎</div>
+      <div>
+        <h1>Claim<span>Detective</span></h1>
+        <p>Evidence, not guesses.</p>
+      </div>
+    </div>
+    <div class="ai-badge">✦ AI-assisted</div>
+  </header>
 
-      <section class="claim-form" aria-labelledby="claimHeading">
-        <div class="section-heading"><h2 id="claimHeading">A claim you’ve heard</h2><span>Sent only when you investigate</span></div>
-        <textarea id="claimInput" maxlength="280" spellcheck="true" placeholder="e.g. Turmeric cures inflammation."></textarea>
-        <div class="form-actions"><button class="example-button" id="exampleButton" type="button">Try the turmeric example <span>↗</span></button><button class="primary-button" id="investigateButton" type="button">Investigate claim <span>→</span></button></div>
-      </section>
-      <p class="privacy-note">No diagnosis. No treatment plan. Your claim is not saved by this app.</p>
-      <p class="prototype-note">AI disclosure: Claimlight uses an AI model and web search to draft a source-linked educational dossier. It can be incomplete or wrong — open the sources and check the context.</p>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">HEALTH CLAIM CHECKER</div>
+      <h2>Don't just ask if it's true.<br><span>See the evidence.</span></h2>
+      <p>
+        Enter a health claim and explore what the evidence says,
+        what remains uncertain, and where the information comes from.
+      </p>
 
-      <section id="emptyState" class="empty-state"><div class="empty-emblem"><span>?</span></div><h2>See the work behind the answer.</h2><p>Instead of a “true or false” badge, Claimlight shows the question, the evidence boundaries, and the gaps.</p></section>
+      <div class="search-card">
+        <label for="claimInput">What claim do you want to investigate?</label>
 
-      <section id="results" class="results hidden" aria-live="polite">
-        <div class="result-header"><div><p class="eyebrow"><span></span> Claim dossier</p><h2 id="resultHeading">A closer look at the claim</h2></div><button class="copy-button" id="copyButton" aria-label="Copy a text summary">⧉</button></div>
+        <div class="input-wrap">
+          <textarea
+            id="claimInput"
+            rows="3"
+            placeholder="e.g. Turmeric cures inflammation."
+          ></textarea>
 
-        <section class="dossier-card claim-card"><div class="card-label"><span>01</span> Claim</div><p class="quoted-claim" id="quotedClaim"></p><div class="claim-parts" id="claimParts"></div></section>
+          <button id="analyzeBtn">
+            <span>Analyze claim</span>
+            <span>→</span>
+          </button>
+        </div>
 
-        <section class="dossier-card evidence-card"><div class="card-label"><span>02</span> Evidence we looked for</div><h3>Does research test this exact promise?</h3><p id="evidenceText"></p><div class="method-grid"><div><b>Human research</b><span>More relevant than lab-only findings</span></div><div><b>Comparison group</b><span>Helps separate signal from chance</span></div><div><b>Matching outcome</b><span>“Cure” needs more than a marker change</span></div></div></section>
+        <div class="examples">
+          <span>Try:</span>
+          <button data-claim="Turmeric cures inflammation.">Turmeric cures inflammation</button>
+          <button data-claim="Drinking lemon water detoxes your body.">Lemon water detoxes the body</button>
+          <button data-claim="Vitamin C prevents the common cold.">Vitamin C prevents colds</button>
+        </div>
+      </div>
+    </section>
 
-        <section class="dossier-card strength-card"><div class="card-label"><span>03</span> Evidence strength</div><div class="strength-line"><div><h3 id="strengthTitle">Limited & mixed</h3><p id="strengthText"></p></div><span class="strength-pill" id="strengthPill">Caution</span></div><div class="reasoning-list" id="reasoningList"></div></section>
+    <section id="results" class="results hidden">
 
-        <section class="dossier-card gaps-card"><div class="card-label"><span>04</span> What we don’t know</div><div id="gapsList" class="gaps-list"></div></section>
+      <div class="result-header">
+        <div>
+          <div class="eyebrow">INVESTIGATION COMPLETE</div>
+          <h2>Evidence breakdown</h2>
+        </div>
+        <button id="newClaim" class="secondary-btn">← New claim</button>
+      </div>
 
-        <section class="sources-section" aria-labelledby="sourcesHeading"><div class="sources-header"><div><p class="eyebrow"><span></span> Sources</p><h2 id="sourcesHeading">Open the underlying work.</h2></div><span id="sourceCount">0 sources</span></div><p class="sources-note" id="sourcesNote"></p><div id="sourceList"></div></section>
+      <div class="claim-card">
+        <div class="card-label">THE CLAIM</div>
+        <h3 id="claimText"></h3>
+        <p id="claimInterpretation"></p>
+      </div>
 
-        <section class="next-card"><div><p class="eyebrow"><span></span> A realistic next step</p><h2>Bring better questions.</h2></div><ul id="nextSteps"></ul><p class="boundary-note">This is an educational research summary, not medical advice. It cannot tell you what to take, stop, or change.</p></section>
-      </section>
-    </main>
+      <div class="strength-card">
+        <div>
+          <div class="card-label">EVIDENCE STRENGTH</div>
+          <h3 id="strengthText">Limited / Mixed</h3>
+          <p id="strengthDescription"></p>
+        </div>
 
-    <div id="aboutModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><div class="modal-card"><button class="close-button" id="closeButton" aria-label="Close">×</button><p class="eyebrow"><span></span> About Claimlight</p><h2 id="aboutTitle">A map, not medical care.</h2><p>Claimlight turns a health statement into questions about evidence: what was studied, in whom, compared with what, and what was not tested. It uses AI and web search to assemble each dossier.</p><p>It does not diagnose, determine whether something is safe or effective for you, or replace guidance from a qualified professional. Research coverage can vary, so the app shows its sources and uncertainty instead of a certainty badge.</p></div></div>
-    <footer><span>Claimlight</span><span>Evidence deserves context</span></footer>
-    <script src="script.js"></script>
-  </body>
+        <div class="strength-meter">
+          <div class="meter-track">
+            <div id="meterFill"></div>
+          </div>
+          <div class="meter-labels">
+            <span>Limited</span>
+            <span>Mixed</span>
+            <span>Strong</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+
+        <article class="info-card">
+          <div class="icon green">✓</div>
+          <div>
+            <div class="card-label">WHAT THE EVIDENCE SAYS</div>
+            <h3>What we found</h3>
+            <p id="evidenceText"></p>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="icon amber">?</div>
+          <div>
+            <div class="card-label">UNCERTAINTY</div>
+            <h3>What we don't know</h3>
+            <p id="uncertaintyText"></p>
+          </div>
+        </article>
+
+        <article class="info-card full">
+          <div class="icon blue">✦</div>
+          <div>
+            <div class="card-label">WHY THIS CONCLUSION?</div>
+            <h3>How the evidence was interpreted</h3>
+
+            <div id="reasoningSteps" class="reasoning"></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="sources-section">
+        <div class="card-label">SOURCES</div>
+        <h3>Explore the evidence</h3>
+        <div id="sources" class="sources"></div>
+      </div>
+
+      <div class="next-step">
+        <div class="next-icon">💬</div>
+        <div>
+          <div class="card-label">NEXT STEP</div>
+          <h3>Questions worth discussing</h3>
+          <ul id="questions"></ul>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>Important:</strong> Claim Detective is an AI-assisted educational
+        prototype, not a doctor or medical device. It does not diagnose conditions,
+        prescribe or change treatment, make emergency decisions, or guarantee that
+        information is complete or accurate. Always consider the original sources
+        and discuss personal health decisions with a qualified professional.
+      </div>
+
+    </section>
+
+    <section class="how-it-works">
+      <div class="eyebrow">HOW IT WORKS</div>
+      <h2>From claim to evidence.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <span>01</span>
+          <h3>Extract</h3>
+          <p>We identify what the claim is actually saying.</p>
+        </div>
+
+        <div class="step">
+          <span>02</span>
+          <h3>Evaluate</h3>
+          <p>We separate evidence from assumptions and marketing language.</p>
+        </div>
+
+        <div class="step">
+          <span>03</span>
+          <h3>Explain</h3>
+          <p>We show evidence strength, uncertainty, reasoning and sources.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>ClaimDetective</span>
+    <span>Educational AI prototype · Not medical advice</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
 </html>
